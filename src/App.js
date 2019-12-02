@@ -87,7 +87,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        {console.log(localStorage)}
         <div className="header">
         <h2>Welcome to your Todo App!</h2>
         <TodoForm handleChanges={this.handleChanges} handleSubmit={this.handleSubmit} name={this.state.name} clearCompleted={this.clearCompleted}/>
