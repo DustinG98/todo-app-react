@@ -3,11 +3,13 @@ import TodoList from './components/TodoComponents/TodoList'
 import TodoForm from './components/TodoComponents/TodoForm'
 import './app.css'
 
-const todos = [
+
+const todoList = [
   {id: 0, name: 'First Todo', completed: false},
   {id: 1, name: 'Second Todo', completed: false},
   {id: 2, name: 'Third Todo', completed: false}
 ]
+
 
 class App extends React.Component {
   // you will need a place to store your state in this component.
@@ -17,51 +19,60 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      todos: todos,
+      todos: JSON.parse(localStorage.getItem("todos")),
       name: ''
     }
   }
 
   //ADD TODO
   addTodo = name => {
+    const existingTodos = JSON.parse(localStorage.getItem("todos"))
     const todo = {
       name: name,
       id: Date.now(),
       completed: false
     }
+    existingTodos.push(todo)
+    localStorage.setItem("todos", JSON.stringify(existingTodos))
     this.setState({
-      todos: [...this.state.todos, todo]
+      todos: JSON.parse(localStorage.getItem("todos"))
     })
   }
 
   //TOGGLE COMPLETED
   toggleCompleted = id => {
-    const newTodos = this.state.todos.map(todo => {
-      if(todo.id === id) {
-        todo.completed = !todo.completed;
+    const todos = JSON.parse(localStorage.getItem("todos"))
+    const newTodos = todos.map(todo => {
+      if(todo.id === id && todo.completed === false) {
+        todo.completed = true;
         return todo;
-      } else {
-        return todo
-      }
+      } else if(todo.id === id && todo.completed === true) {
+        todo.completed = false;
+      } 
+      return todo
     })
+    localStorage.setItem("todos", JSON.stringify(newTodos))
     this.setState({
-      todos: newTodos
+      todos: JSON.parse(localStorage.getItem("todos"))
     })
   }
 
   //Clear Completed 
   clearCompleted = e => {
     e.preventDefault()
-    const newTodos = this.state.todos.filter(todo => !todo.completed)
+    const todos = JSON.parse(localStorage.getItem("todos"))
+    const newTodos = todos.filter(todo => !todo.completed)
+    localStorage.setItem("todos", JSON.stringify(newTodos))
     this.setState({
-      todos: newTodos
+      todos: JSON.parse(localStorage.getItem("todos"))
     })
   }
 
   //HANDLE CHANGES
   handleChanges = e => {
+
     this.setState({
-        name: e.target.value
+        [e.target.name]: e.target.value
     })
   }
 
@@ -76,6 +87,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        {console.log(localStorage)}
         <div className="header">
         <h2>Welcome to your Todo App!</h2>
         <TodoForm handleChanges={this.handleChanges} handleSubmit={this.handleSubmit} name={this.state.name} clearCompleted={this.clearCompleted}/>
