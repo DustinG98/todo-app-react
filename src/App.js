@@ -16,10 +16,11 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      todos: todos
+      todos: todos,
+      name: ''
     }
   }
-
+  
   addTodo = name => {
     const todo = {
       name: name,
@@ -30,12 +31,26 @@ class App extends React.Component {
       todos: [...this.state.todos, todo]
     })
   }
+
+  handleChanges = e => {
+    this.setState({
+        name: e.target.value
+    })
+  }
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.addTodo(this.state.name);
+    this.setState({
+        name: ''
+    })
+  }
   render() {
     return (
       <div>
         <h2>Welcome to your Todo App!</h2>
         <TodoList todos={this.state.todos}/>
-        <TodoForm addTodo={this.addTodo}/>
+        <TodoForm handleChanges={this.handleChanges} handleSubmit={this.handleSubmit} name={this.state.name}/>
       </div>
     );
   }
