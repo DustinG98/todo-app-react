@@ -46,12 +46,10 @@ class App extends React.Component {
   toggleCompleted = id => {
     const todos = JSON.parse(localStorage.getItem("todos"))
     const newTodos = todos.map(todo => {
-      if(todo.id === id && todo.completed === false) {
-        todo.completed = true;
+      if(todo.id === id) {
+        todo.completed = !todo.completed;
         return todo;
-      } else if(todo.id === id && todo.completed === true) {
-        todo.completed = false;
-      } 
+      }
       return todo
     })
     localStorage.setItem("todos", JSON.stringify(newTodos))
